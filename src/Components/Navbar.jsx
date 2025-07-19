@@ -76,19 +76,6 @@ function Navbar() {
     setActiveDropdown(null);
   };
 
-  const handleMobileLinkClick = (e, action) => {
-    e.preventDefault();
-    if (action === 'contact') {
-      scrollToContact();
-    } else {
-      const href = e.currentTarget.getAttribute('href');
-      if (href) {
-        closeAllDropdowns();
-        setTimeout(() => navigate(href), 10);
-      }
-    }
-  };
-
   return (
     <nav className="bg-gradient-to-r from-sky-100 to-sky-300 shadow-sm sticky top-0 z-50">
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
@@ -294,14 +281,14 @@ function Navbar() {
                   <Link 
                     to="/about" 
                     className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                    onClick={(e) => handleMobileLinkClick(e)}
+                    onClick={closeAllDropdowns}
                   >
                     About Us
                   </Link>
                   <Link 
                     to="/team" 
                     className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                    onClick={(e) => handleMobileLinkClick(e)}
+                    onClick={closeAllDropdowns}
                   >
                     Our Team
                   </Link>
@@ -329,14 +316,14 @@ function Navbar() {
                   <Link 
                     to="/volunteering" 
                     className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                    onClick={(e) => handleMobileLinkClick(e)}
+                    onClick={closeAllDropdowns}
                   >
                     Volunteering
                   </Link>
                   <Link 
                     to="/donate" 
                     className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                    onClick={(e) => handleMobileLinkClick(e)}
+                    onClick={closeAllDropdowns}
                   >
                     Donate
                   </Link>
@@ -367,21 +354,21 @@ function Navbar() {
                   <Link 
                     to="/learn/beginner" 
                     className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                    onClick={(e) => handleMobileLinkClick(e)}
+                    onClick={closeAllDropdowns}
                   >
                     Beginner Courses
                   </Link>
                   <Link 
                     to="/learn/intermediate" 
                     className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                    onClick={(e) => handleMobileLinkClick(e)}
+                    onClick={closeAllDropdowns}
                   >
                     Intermediate Courses
                   </Link>
                   <Link 
                     to="/learn/advanced" 
                     className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                    onClick={(e) => handleMobileLinkClick(e)}
+                    onClick={closeAllDropdowns}
                   >
                     Advanced Courses
                   </Link>
@@ -389,7 +376,7 @@ function Navbar() {
                   <Link 
                     to="/learn/start" 
                     className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                    onClick={(e) => handleMobileLinkClick(e)}
+                    onClick={closeAllDropdowns}
                   >
                     Register for Classes
                   </Link>
@@ -401,19 +388,22 @@ function Navbar() {
             <Link
               to="/forum"
               className="block px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
-              onClick={(e) => handleMobileLinkClick(e)}
+              onClick={closeAllDropdowns}
             >
               Forum
             </Link>
             <Link
               to="/hackathon"
               className="block px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
-              onClick={(e) => handleMobileLinkClick(e)}
+              onClick={closeAllDropdowns}
             >
               Hackathon
             </Link>
             <button
-              onClick={(e) => handleMobileLinkClick(e, 'contact')}
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToContact();
+              }}
               className="block w-full text-left px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
             >
               Contact
