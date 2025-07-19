@@ -90,3 +90,15 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
 }
 
+/* Add to your index.css */
+.mobile-menu-button {
+  touch-action: manipulation;
+}
+
+.mobile-menu-overlay a, 
+.mobile-menu-overlay button {
+  touch-action: manipulation;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
