@@ -8,18 +8,17 @@ function Navbar() {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
-  const [isClosing, setIsClosing] = useState(false);
 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        closeAllDropdowns();
+        setActiveDropdown(null);
       }
       if (mobileMenuRef.current && 
           !mobileMenuRef.current.contains(event.target) &&
           !event.target.closest('.mobile-menu-button')) {
-        closeAllDropdowns();
+        setActiveDropdown(null);
       }
     };
 
@@ -32,35 +31,15 @@ function Navbar() {
   }, []);
 
   // Custom smooth scroll function
-  const smoothScrollTo = (elementId, duration = 800) => {
+  const smoothScrollTo = (elementId) => {
     const element = document.getElementById(elementId);
-    if (!element) return;
-
-    const targetPosition = element.getBoundingClientRect().top + window.pageYOffset - 80;
-    const startPosition = window.pageYOffset;
-    const distance = targetPosition - startPosition;
-    let startTime = null;
-
-    const animation = (currentTime) => {
-      if (startTime === null) startTime = currentTime;
-      const timeElapsed = currentTime - startTime;
-      const run = easeInOutQuad(timeElapsed, startPosition, distance, duration);
-      window.scrollTo(0, run);
-      if (timeElapsed < duration) requestAnimationFrame(animation);
-    };
-
-    const easeInOutQuad = (t, b, c, d) => {
-      t /= d/2;
-      if (t < 1) return c/2*t*t + b;
-      t--;
-      return -c/2 * (t*(t-2) - 1) + b;
-    };
-
-    requestAnimationFrame(animation);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   const scrollToContact = () => {
-    closeAllDropdowns();
+    setActiveDropdown(null);
     if (location.pathname === '/') {
       smoothScrollTo('contact');
     } else {
@@ -70,20 +49,12 @@ function Navbar() {
   };
 
   const toggleDropdown = (dropdownName) => {
-    if (isClosing) return;
     setActiveDropdown(activeDropdown === dropdownName ? null : dropdownName);
   };
 
-  const closeAllDropdowns = () => {
-    setIsClosing(true);
+  const handleNavigation = (path) => {
     setActiveDropdown(null);
-    setTimeout(() => setIsClosing(false), 300);
-  };
-
-  const handleMobileNavigation = (e, path) => {
-    e.preventDefault();
-    closeAllDropdowns();
-    setTimeout(() => navigate(path), 50);
+    navigate(path);
   };
 
   return (
@@ -96,7 +67,7 @@ function Navbar() {
               to="/" 
               className="flex items-center" 
               onClick={() => {
-                closeAllDropdowns();
+                setActiveDropdown(null);
                 window.scrollTo(0, 0);
               }}
             >
@@ -130,14 +101,14 @@ function Navbar() {
                   <Link 
                     to="/about" 
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
-                    onClick={closeAllDropdowns}
+                    onClick={() => setActiveDropdown(null)}
                   >
                     About Us
                   </Link>
                   <Link 
                     to="/team" 
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
-                    onClick={closeAllDropdowns}
+                    onClick={() => setActiveDropdown(null)}
                   >
                     Our Team
                   </Link>
@@ -162,14 +133,14 @@ function Navbar() {
                   <Link 
                     to="/volunteering" 
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
-                    onClick={closeAllDropdowns}
+                    onClick={() => setActiveDropdown(null)}
                   >
                     Volunteering
                   </Link>
                   <Link 
                     to="/donate" 
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
-                    onClick={closeAllDropdowns}
+                    onClick={() => setActiveDropdown(null)}
                   >
                     Donate
                   </Link>
@@ -197,21 +168,21 @@ function Navbar() {
                   <Link 
                     to="/learn/beginner" 
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
-                    onClick={closeAllDropdowns}
+                    onClick={() => setActiveDropdown(null)}
                   >
                     Beginner Courses
                   </Link>
                   <Link 
                     to="/learn/intermediate" 
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
-                    onClick={closeAllDropdowns}
+                    onClick={() => setActiveDropdown(null)}
                   >
                     Intermediate Courses
                   </Link>
                   <Link 
                     to="/learn/advanced" 
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
-                    onClick={closeAllDropdowns}
+                    onClick={() => setActiveDropdown(null)}
                   >
                     Advanced Courses
                   </Link>
@@ -219,7 +190,7 @@ function Navbar() {
                   <Link 
                     to="/learn/start" 
                     className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
-                    onClick={closeAllDropdowns}
+                    onClick={() => setActiveDropdown(null)}
                   >
                     Register for Classes
                   </Link>
@@ -231,7 +202,7 @@ function Navbar() {
             <Link
               to="/forum"
               className="text-black hover:text-blue-600 hover:bg-blue-100 px-3 py-2 rounded-md text-base font-medium whitespace-nowrap transition-colors duration-200"
-              onClick={closeAllDropdowns}
+              onClick={() => setActiveDropdown(null)}
             >
               Forum
             </Link>
@@ -239,7 +210,7 @@ function Navbar() {
             <Link
               to="/hackathon"
               className="text-black hover:text-blue-600 hover:bg-blue-100 px-3 py-2 rounded-md text-base font-medium whitespace-nowrap transition-colors duration-200"
-              onClick={closeAllDropdowns}
+              onClick={() => setActiveDropdown(null)}
             >
               Hackathon
             </Link>
@@ -273,177 +244,160 @@ function Navbar() {
         </div>
 
         {/* Mobile menu */}
-        <div 
-          ref={mobileMenuRef}
-          className={`md:hidden bg-blue-50 shadow-lg rounded-lg mx-2 transition-all duration-300 ease-in-out overflow-hidden ${
-            activeDropdown === 'mobile' ? 'max-h-screen py-2 mt-2' : 'max-h-0 py-0 mt-0'
-          }`}
-        >
-          {/* About */}
-          <div className="px-4 py-2">
-            <button 
-              onClick={() => toggleDropdown('aboutMobile')}
-              className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${
-                activeDropdown === 'aboutMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'
-              }`}
-            >
-              <span className="font-medium">About</span>
-              <svg 
-                className={`h-5 w-5 transform transition-transform ${
-                  activeDropdown === 'aboutMobile' ? 'rotate-180' : ''
-                }`}
-                fill="currentColor" 
-                viewBox="0 0 20 20"
+        {activeDropdown === 'mobile' && (
+          <div 
+            ref={mobileMenuRef}
+            className="md:hidden bg-blue-50 shadow-lg rounded-lg mx-2 mt-2 py-2"
+          >
+            {/* About */}
+            <div className="px-4 py-2">
+              <button 
+                onClick={() => toggleDropdown('aboutMobile')}
+                className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${activeDropdown === 'aboutMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'}`}
               >
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
-            <div 
-              className={`transition-all duration-300 overflow-hidden ${
-                activeDropdown === 'aboutMobile' ? 'max-h-96' : 'max-h-0'
-              }`}
-            >
-              <div className="pl-4 mt-1 space-y-2 bg-blue-100 rounded-md p-2">
-                <Link 
-                  to="/about" 
-                  className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                  onClick={(e) => handleMobileNavigation(e, '/about')}
+                <span className="font-medium">About</span>
+                <svg 
+                  className={`h-5 w-5 transform transition-transform ${activeDropdown === 'aboutMobile' ? 'rotate-180' : ''}`}
+                  fill="currentColor" 
+                  viewBox="0 0 20 20"
                 >
-                  About Us
-                </Link>
-                <Link 
-                  to="/team" 
-                  className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                  onClick={(e) => handleMobileNavigation(e, '/team')}
-                >
-                  Our Team
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          {/* Contribute */}
-          <div className="px-4 py-2">
-            <button 
-              onClick={() => toggleDropdown('contributeMobile')}
-              className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${
-                activeDropdown === 'contributeMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'
-              }`}
-            >
-              <span className="font-medium">Contribute</span>
-              <svg 
-                className={`h-5 w-5 transform transition-transform ${
-                  activeDropdown === 'contributeMobile' ? 'rotate-180' : ''
-                }`}
-                fill="currentColor" 
-                viewBox="0 0 20 20"
-              >
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
-            {activeDropdown === 'contributeMobile' && (
-              <div className="pl-4 mt-1 space-y-2 bg-blue-100 rounded-md p-2">
-                <Link 
-                  to="/volunteering" 
-                  className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                  onClick={(e) => handleMobileNavigation(e, '/volunteering')}
-                >
-                  Volunteering
-                </Link>
-                <Link 
-                  to="/donate" 
-                  className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                  onClick={(e) => handleMobileNavigation(e, '/donate')}
-                >
-                  Donate
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Learn */}
-          <div className="px-4 py-2">
-            <button 
-              onClick={() => toggleDropdown('learnMobile')}
-              className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${
-                activeDropdown === 'learnMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'
-              }`}
-            >
-              <span className="font-medium">Learn</span>
-              <svg 
-                className={`h-5 w-5 transform transition-transform ${
-                  activeDropdown === 'learnMobile' ? 'rotate-180' : ''
-                }`}
-                fill="currentColor" 
-                viewBox="0 0 20 20"
-              >
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </button>
-            {activeDropdown === 'learnMobile' && (
-              <div className="pl-4 mt-1 space-y-2 bg-blue-100 rounded-md p-2">
-                <div className="px-4 pt-2 text-xs font-semibold text-blue-800 uppercase tracking-wider bg-blue-200 rounded-md">
-                  Course Levels
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+              {activeDropdown === 'aboutMobile' && (
+                <div className="pl-4 mt-1 space-y-2 bg-blue-100 rounded-md p-2">
+                  <Link 
+                    to="/about" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    About Us
+                  </Link>
+                  <Link 
+                    to="/team" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    Our Team
+                  </Link>
                 </div>
-                <Link 
-                  to="/learn/beginner" 
-                  className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                  onClick={(e) => handleMobileNavigation(e, '/learn/beginner')}
-                >
-                  Beginner Courses
-                </Link>
-                <Link 
-                  to="/learn/intermediate" 
-                  className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                  onClick={(e) => handleMobileNavigation(e, '/learn/intermediate')}
-                >
-                  Intermediate Courses
-                </Link>
-                <Link 
-                  to="/learn/advanced" 
-                  className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                  onClick={(e) => handleMobileNavigation(e, '/learn/advanced')}
-                >
-                  Advanced Courses
-                </Link>
-                <div className="border-t border-blue-300 my-1"></div>
-                <Link 
-                  to="/learn/start" 
-                  className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
-                  onClick={(e) => handleMobileNavigation(e, '/learn/start')}
-                >
-                  Register for Classes
-                </Link>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
 
-          {/* Simple Links */}
-          <Link
-            to="/forum"
-            className="block px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
-            onClick={(e) => handleMobileNavigation(e, '/forum')}
-          >
-            Forum
-          </Link>
-          <Link
-            to="/hackathon"
-            className="block px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
-            onClick={(e) => handleMobileNavigation(e, '/hackathon')}
-          >
-            Hackathon
-          </Link>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              closeAllDropdowns();
-              scrollToContact();
-            }}
-            className="block w-full text-left px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
-          >
-            Contact
-          </button>
-        </div>
+            {/* Contribute */}
+            <div className="px-4 py-2">
+              <button 
+                onClick={() => toggleDropdown('contributeMobile')}
+                className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${activeDropdown === 'contributeMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'}`}
+              >
+                <span className="font-medium">Contribute</span>
+                <svg 
+                  className={`h-5 w-5 transform transition-transform ${activeDropdown === 'contributeMobile' ? 'rotate-180' : ''}`}
+                  fill="currentColor" 
+                  viewBox="0 0 20 20"
+                >
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+              {activeDropdown === 'contributeMobile' && (
+                <div className="pl-4 mt-1 space-y-2 bg-blue-100 rounded-md p-2">
+                  <Link 
+                    to="/volunteering" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    Volunteering
+                  </Link>
+                  <Link 
+                    to="/donate" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    Donate
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Learn */}
+            <div className="px-4 py-2">
+              <button 
+                onClick={() => toggleDropdown('learnMobile')}
+                className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${activeDropdown === 'learnMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'}`}
+              >
+                <span className="font-medium">Learn</span>
+                <svg 
+                  className={`h-5 w-5 transform transition-transform ${activeDropdown === 'learnMobile' ? 'rotate-180' : ''}`}
+                  fill="currentColor" 
+                  viewBox="0 0 20 20"
+                >
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+              {activeDropdown === 'learnMobile' && (
+                <div className="pl-4 mt-1 space-y-2 bg-blue-100 rounded-md p-2">
+                  <div className="px-4 pt-2 text-xs font-semibold text-blue-800 uppercase tracking-wider bg-blue-200 rounded-md">
+                    Course Levels
+                  </div>
+                  <Link 
+                    to="/learn/beginner" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    Beginner Courses
+                  </Link>
+                  <Link 
+                    to="/learn/intermediate" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    Intermediate Courses
+                  </Link>
+                  <Link 
+                    to="/learn/advanced" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    Advanced Courses
+                  </Link>
+                  <div className="border-t border-blue-300 my-1"></div>
+                  <Link 
+                    to="/learn/start" 
+                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    onClick={() => setActiveDropdown(null)}
+                  >
+                    Register for Classes
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Simple Links */}
+            <Link
+              to="/forum"
+              className="block px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
+              onClick={() => setActiveDropdown(null)}
+            >
+              Forum
+            </Link>
+            <Link
+              to="/hackathon"
+              className="block px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
+              onClick={() => setActiveDropdown(null)}
+            >
+              Hackathon
+            </Link>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                scrollToContact();
+              }}
+              className="block w-full text-left px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
+            >
+              Contact
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   );
