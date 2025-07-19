@@ -77,11 +77,16 @@ function Navbar() {
   };
 
   const handleMobileLinkClick = (e, action) => {
-    e.stopPropagation();
+    e.preventDefault();
     if (action === 'contact') {
       scrollToContact();
+    } else {
+      const href = e.currentTarget.getAttribute('href');
+      if (href) {
+        closeAllDropdowns();
+        setTimeout(() => navigate(href), 10);
+      }
     }
-    closeAllDropdowns();
   };
 
   return (
