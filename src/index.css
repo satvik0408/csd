@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 1s ease-out forwards;
+  opacity: 1 !important;
+}
+
+/* Pop-in animation used in your previous code */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-pop-in {
+  animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.card-delay-1 {
+  animation-delay: 0.1s;
+}
+.card-delay-2 {
+  animation-delay: 0.2s;
+}
+.card-delay-3 {
+  animation-delay: 0.3s;
+}
+.card-delay-4 {
+  animation-delay: 0.4s;
+}
+.card-delay-5 {
+  animation-delay: 0.5s;
+}
+
+.code-background {
+  background-image: url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.hero-overlay {
+  background: linear-gradient(135deg, rgba(7, 24, 42, 0.9) 0%, rgba(8, 61, 119, 0.85) 100%);
+}
+
+/* Bounce arrow animation */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-20px);
+  }
+  60% {
+    transform: translateY(-10px);
+  }
+}
+.bounce {
+  animation: bounce 2s infinite;
+}
+
+/* Testimonial fading */
+.testimonial-transition {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* Card hover effect */
+.card-hover-effect {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.card-hover-effect:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
