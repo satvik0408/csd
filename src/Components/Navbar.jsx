@@ -8,6 +8,11 @@ function Navbar() {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
   const mobileMenuRef = useRef(null);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  useEffect(() => {
+    setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -30,11 +35,10 @@ function Navbar() {
     };
   }, []);
 
-  // Custom smooth scroll function
   const smoothScrollTo = (elementId) => {
     const element = document.getElementById(elementId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -52,9 +56,14 @@ function Navbar() {
     setActiveDropdown(activeDropdown === dropdownName ? null : dropdownName);
   };
 
-  const handleNavigation = (path) => {
+  const handleMobileNavigation = (path) => {
     setActiveDropdown(null);
     navigate(path);
+  };
+
+  // Helper function to conditionally apply hover classes
+  const hoverClass = (baseClass) => {
+    return isTouchDevice ? baseClass : `${baseClass} hover:bg-blue-100 hover:text-blue-600`;
   };
 
   return (
@@ -88,7 +97,9 @@ function Navbar() {
             <div className="relative">
               <button 
                 onClick={() => toggleDropdown('about')}
-                className={`text-black hover:text-blue-600 px-3 py-2 text-base font-medium flex items-center transition-colors duration-200 ${activeDropdown === 'about' ? 'bg-blue-100 rounded-t' : ''}`}
+                className={`text-black px-3 py-2 text-base font-medium flex items-center transition-colors duration-200 ${
+                  activeDropdown === 'about' ? 'bg-blue-100 rounded-t' : ''
+                } ${hoverClass('')}`}
               >
                 About
                 <svg className={`ml-1 h-4 w-4 transform ${activeDropdown === 'about' ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20">
@@ -100,14 +111,18 @@ function Navbar() {
                 <div className="absolute right-0 mt-0 w-48 bg-blue-100 rounded-b-md shadow-lg py-1 border border-blue-200 z-10">
                   <Link 
                     to="/about" 
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
+                    className={`block px-4 py-2 text-gray-700 transition-colors duration-150 ${
+                      isTouchDevice ? '' : 'hover:bg-blue-200'
+                    }`}
                     onClick={() => setActiveDropdown(null)}
                   >
                     About Us
                   </Link>
                   <Link 
                     to="/team" 
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
+                    className={`block px-4 py-2 text-gray-700 transition-colors duration-150 ${
+                      isTouchDevice ? '' : 'hover:bg-blue-200'
+                    }`}
                     onClick={() => setActiveDropdown(null)}
                   >
                     Our Team
@@ -120,7 +135,9 @@ function Navbar() {
             <div className="relative">
               <button 
                 onClick={() => toggleDropdown('contribute')}
-                className={`text-black hover:text-blue-600 px-3 py-2 text-base font-medium flex items-center transition-colors duration-200 ${activeDropdown === 'contribute' ? 'bg-blue-100 rounded-t' : ''}`}
+                className={`text-black px-3 py-2 text-base font-medium flex items-center transition-colors duration-200 ${
+                  activeDropdown === 'contribute' ? 'bg-blue-100 rounded-t' : ''
+                } ${hoverClass('')}`}
               >
                 Contribute
                 <svg className={`ml-1 h-4 w-4 transform ${activeDropdown === 'contribute' ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20">
@@ -132,14 +149,18 @@ function Navbar() {
                 <div className="absolute right-0 mt-0 w-48 bg-blue-100 rounded-b-md shadow-lg py-1 border border-blue-200 z-10">
                   <Link 
                     to="/volunteering" 
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
+                    className={`block px-4 py-2 text-gray-700 transition-colors duration-150 ${
+                      isTouchDevice ? '' : 'hover:bg-blue-200'
+                    }`}
                     onClick={() => setActiveDropdown(null)}
                   >
                     Volunteering
                   </Link>
                   <Link 
                     to="/donate" 
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
+                    className={`block px-4 py-2 text-gray-700 transition-colors duration-150 ${
+                      isTouchDevice ? '' : 'hover:bg-blue-200'
+                    }`}
                     onClick={() => setActiveDropdown(null)}
                   >
                     Donate
@@ -152,7 +173,9 @@ function Navbar() {
             <div className="relative">
               <button 
                 onClick={() => toggleDropdown('learn')}
-                className={`text-black hover:text-blue-600 px-3 py-2 text-base font-medium flex items-center transition-colors duration-200 ${activeDropdown === 'learn' ? 'bg-blue-100 rounded-t' : ''}`}
+                className={`text-black px-3 py-2 text-base font-medium flex items-center transition-colors duration-200 ${
+                  activeDropdown === 'learn' ? 'bg-blue-100 rounded-t' : ''
+                } ${hoverClass('')}`}
               >
                 Learn
                 <svg className={`ml-1 h-4 w-4 transform ${activeDropdown === 'learn' ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 20 20">
@@ -167,21 +190,27 @@ function Navbar() {
                   </div>
                   <Link 
                     to="/learn/beginner" 
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
+                    className={`block px-4 py-2 text-gray-700 transition-colors duration-150 ${
+                      isTouchDevice ? '' : 'hover:bg-blue-200'
+                    }`}
                     onClick={() => setActiveDropdown(null)}
                   >
                     Beginner Courses
                   </Link>
                   <Link 
                     to="/learn/intermediate" 
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
+                    className={`block px-4 py-2 text-gray-700 transition-colors duration-150 ${
+                      isTouchDevice ? '' : 'hover:bg-blue-200'
+                    }`}
                     onClick={() => setActiveDropdown(null)}
                   >
                     Intermediate Courses
                   </Link>
                   <Link 
                     to="/learn/advanced" 
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
+                    className={`block px-4 py-2 text-gray-700 transition-colors duration-150 ${
+                      isTouchDevice ? '' : 'hover:bg-blue-200'
+                    }`}
                     onClick={() => setActiveDropdown(null)}
                   >
                     Advanced Courses
@@ -189,7 +218,9 @@ function Navbar() {
                   <div className="border-t border-blue-300 my-1"></div>
                   <Link 
                     to="/learn/start" 
-                    className="block px-4 py-2 text-gray-700 hover:bg-blue-200 active:bg-blue-300 transition-colors duration-150"
+                    className={`block px-4 py-2 text-gray-700 transition-colors duration-150 ${
+                      isTouchDevice ? '' : 'hover:bg-blue-200'
+                    }`}
                     onClick={() => setActiveDropdown(null)}
                   >
                     Register for Classes
@@ -201,7 +232,7 @@ function Navbar() {
             {/* Simple Links */}
             <Link
               to="/forum"
-              className="text-black hover:text-blue-600 hover:bg-blue-100 px-3 py-2 rounded-md text-base font-medium whitespace-nowrap transition-colors duration-200"
+              className={`text-black px-3 py-2 rounded-md text-base font-medium whitespace-nowrap transition-colors duration-200 ${hoverClass('')}`}
               onClick={() => setActiveDropdown(null)}
             >
               Forum
@@ -209,7 +240,7 @@ function Navbar() {
 
             <Link
               to="/hackathon"
-              className="text-black hover:text-blue-600 hover:bg-blue-100 px-3 py-2 rounded-md text-base font-medium whitespace-nowrap transition-colors duration-200"
+              className={`text-black px-3 py-2 rounded-md text-base font-medium whitespace-nowrap transition-colors duration-200 ${hoverClass('')}`}
               onClick={() => setActiveDropdown(null)}
             >
               Hackathon
@@ -217,7 +248,7 @@ function Navbar() {
 
             <button
               onClick={scrollToContact}
-              className="text-black hover:text-blue-600 hover:bg-blue-100 px-3 py-2 rounded-md text-base font-medium whitespace-nowrap transition-colors duration-200"
+              className={`text-black px-3 py-2 rounded-md text-base font-medium whitespace-nowrap transition-colors duration-200 ${hoverClass('')}`}
             >
               Contact
             </button>
@@ -226,7 +257,7 @@ function Navbar() {
           {/* Mobile menu button */}
           <div className="md:hidden ml-4 flex items-center">
             <button 
-              className="mobile-menu-button text-slate-700 hover:text-blue-600 p-2 rounded-full focus:outline-none hover:bg-blue-100"
+              className="mobile-menu-button text-slate-700 p-2 rounded-full focus:outline-none"
               onClick={() => toggleDropdown('mobile')}
               aria-label="Toggle menu"
             >
@@ -253,11 +284,15 @@ function Navbar() {
             <div className="px-4 py-2">
               <button 
                 onClick={() => toggleDropdown('aboutMobile')}
-                className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${activeDropdown === 'aboutMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'}`}
+                className={`w-full flex justify-between items-center text-left text-black py-3 px-3 rounded-md ${
+                  activeDropdown === 'aboutMobile' ? 'bg-blue-200' : ''
+                }`}
               >
                 <span className="font-medium">About</span>
                 <svg 
-                  className={`h-5 w-5 transform transition-transform ${activeDropdown === 'aboutMobile' ? 'rotate-180' : ''}`}
+                  className={`h-5 w-5 transform transition-transform ${
+                    activeDropdown === 'aboutMobile' ? 'rotate-180' : ''
+                  }`}
                   fill="currentColor" 
                   viewBox="0 0 20 20"
                 >
@@ -268,14 +303,14 @@ function Navbar() {
                 <div className="pl-4 mt-1 space-y-2 bg-blue-100 rounded-md p-2">
                   <Link 
                     to="/about" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    className="block py-3 px-4 text-gray-700 rounded transition-colors"
                     onClick={() => setActiveDropdown(null)}
                   >
                     About Us
                   </Link>
                   <Link 
                     to="/team" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    className="block py-3 px-4 text-gray-700 rounded transition-colors"
                     onClick={() => setActiveDropdown(null)}
                   >
                     Our Team
@@ -288,11 +323,15 @@ function Navbar() {
             <div className="px-4 py-2">
               <button 
                 onClick={() => toggleDropdown('contributeMobile')}
-                className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${activeDropdown === 'contributeMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'}`}
+                className={`w-full flex justify-between items-center text-left text-black py-3 px-3 rounded-md ${
+                  activeDropdown === 'contributeMobile' ? 'bg-blue-200' : ''
+                }`}
               >
                 <span className="font-medium">Contribute</span>
                 <svg 
-                  className={`h-5 w-5 transform transition-transform ${activeDropdown === 'contributeMobile' ? 'rotate-180' : ''}`}
+                  className={`h-5 w-5 transform transition-transform ${
+                    activeDropdown === 'contributeMobile' ? 'rotate-180' : ''
+                  }`}
                   fill="currentColor" 
                   viewBox="0 0 20 20"
                 >
@@ -303,14 +342,14 @@ function Navbar() {
                 <div className="pl-4 mt-1 space-y-2 bg-blue-100 rounded-md p-2">
                   <Link 
                     to="/volunteering" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    className="block py-3 px-4 text-gray-700 rounded transition-colors"
                     onClick={() => setActiveDropdown(null)}
                   >
                     Volunteering
                   </Link>
                   <Link 
                     to="/donate" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    className="block py-3 px-4 text-gray-700 rounded transition-colors"
                     onClick={() => setActiveDropdown(null)}
                   >
                     Donate
@@ -323,11 +362,15 @@ function Navbar() {
             <div className="px-4 py-2">
               <button 
                 onClick={() => toggleDropdown('learnMobile')}
-                className={`w-full flex justify-between items-center text-left text-black hover:text-blue-600 py-3 px-3 rounded-md ${activeDropdown === 'learnMobile' ? 'bg-blue-200' : 'hover:bg-blue-100'}`}
+                className={`w-full flex justify-between items-center text-left text-black py-3 px-3 rounded-md ${
+                  activeDropdown === 'learnMobile' ? 'bg-blue-200' : ''
+                }`}
               >
                 <span className="font-medium">Learn</span>
                 <svg 
-                  className={`h-5 w-5 transform transition-transform ${activeDropdown === 'learnMobile' ? 'rotate-180' : ''}`}
+                  className={`h-5 w-5 transform transition-transform ${
+                    activeDropdown === 'learnMobile' ? 'rotate-180' : ''
+                  }`}
                   fill="currentColor" 
                   viewBox="0 0 20 20"
                 >
@@ -341,21 +384,21 @@ function Navbar() {
                   </div>
                   <Link 
                     to="/learn/beginner" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    className="block py-3 px-4 text-gray-700 rounded transition-colors"
                     onClick={() => setActiveDropdown(null)}
                   >
                     Beginner Courses
                   </Link>
                   <Link 
                     to="/learn/intermediate" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    className="block py-3 px-4 text-gray-700 rounded transition-colors"
                     onClick={() => setActiveDropdown(null)}
                   >
                     Intermediate Courses
                   </Link>
                   <Link 
                     to="/learn/advanced" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    className="block py-3 px-4 text-gray-700 rounded transition-colors"
                     onClick={() => setActiveDropdown(null)}
                   >
                     Advanced Courses
@@ -363,7 +406,7 @@ function Navbar() {
                   <div className="border-t border-blue-300 my-1"></div>
                   <Link 
                     to="/learn/start" 
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-200 active:bg-blue-300 rounded transition-colors"
+                    className="block py-3 px-4 text-gray-700 rounded transition-colors"
                     onClick={() => setActiveDropdown(null)}
                   >
                     Register for Classes
@@ -375,14 +418,14 @@ function Navbar() {
             {/* Simple Links */}
             <Link
               to="/forum"
-              className="block px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
+              className="block px-4 py-3 text-black transition-colors rounded-md mx-2"
               onClick={() => setActiveDropdown(null)}
             >
               Forum
             </Link>
             <Link
               to="/hackathon"
-              className="block px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
+              className="block px-4 py-3 text-black transition-colors rounded-md mx-2"
               onClick={() => setActiveDropdown(null)}
             >
               Hackathon
@@ -392,7 +435,7 @@ function Navbar() {
                 e.preventDefault();
                 scrollToContact();
               }}
-              className="block w-full text-left px-4 py-3 text-black hover:bg-blue-200 active:bg-blue-300 transition-colors rounded-md mx-2"
+              className="block w-full text-left px-4 py-3 text-black transition-colors rounded-md mx-2"
             >
               Contact
             </button>
